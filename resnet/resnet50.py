@@ -1,3 +1,5 @@
+import time
+
 import argparse
 import os
 import struct
@@ -221,7 +223,7 @@ def create_engine(maxBatchSize, builder, config, dt):
 
     # Build engine
     builder.max_batch_size = maxBatchSize
-    builder.max_workspace_size = 1 << 20
+    config.max_workspace_size = 1 << 20
     engine = builder.build_engine(network, config)
 
     del network
@@ -290,6 +292,9 @@ if __name__ == '__main__':
         np.copyto(host_in, data.ravel())
         host_out = cuda.pagelocked_empty(OUTPUT_SIZE, dtype=np.float32)
 
-        doInference(context, host_in, host_out, BATCH_SIZE)
+        start = time.time()
+        for i in range(10000):
+            doInference(context, host_in, host_out, BATCH_SIZE)
+        print('elapsed time: ', time.time() - start)
 
         print(f'Output: \n{host_out[:10]}\n{host_out[-10:]}')
