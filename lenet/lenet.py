@@ -7,6 +7,7 @@ import numpy as np
 import pycuda.autoinit
 import pycuda.driver as cuda
 import tensorrt as trt
+import time
 
 INPUT_H = 32
 INPUT_W = 32
@@ -119,7 +120,7 @@ def createLenetEngine(maxBatchSize, builder, config, dt):
 
     # Build engine
     builder.max_batch_size = maxBatchSize
-    builder.max_workspace_size = 1 << 20
+    config.max_workspace_size = 1 << 28
     engine = builder.build_engine(network, config)
 
     del network
@@ -185,6 +186,9 @@ if __name__ == '__main__':
         np.copyto(host_in, data.ravel())
         host_out = cuda.pagelocked_empty(OUTPUT_SIZE, dtype=np.float32)
 
-        doInference(context, host_in, host_out, 1)
+        start = time.time()
+        for i in range(100000):
+            doInference(context, host_in, host_out, 1)
+        print('elapsed time:', time.time() - start)
 
         print(f'Output: {host_out}')

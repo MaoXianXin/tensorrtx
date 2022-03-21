@@ -16,8 +16,8 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(/usr/local/cuda/include)
 link_directories(/usr/local/cuda/lib64)
 # tensorrt
-include_directories(/usr/include/x86_64-linux-gnu/)
-link_directories(/usr/lib/x86_64-linux-gnu/)
+include_directories(/home/csdn/Pictures/TensorRT-8.2.1.8/include/)
+link_directories(/home/csdn/Pictures/TensorRT-8.2.1.8/lib/)
 
 FILE(GLOB SRC_FILES ${PROJECT_SOURCE_DIR}/lenet.cpp ${PROJECT_SOURCE_DIR}/include/*.h)
 
